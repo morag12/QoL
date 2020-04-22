@@ -79,11 +79,6 @@ namespace QoL
             __result = true;
             return true;
         }
-        private static bool AntiOverrides(ref bool __result, string __0, string __1, string __2)
-        {
-            __result = false;
-            return false;
-        }
 
         public static string HWIDSpoofer()
         {
