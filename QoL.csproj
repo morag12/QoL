@@ -376,7 +376,13 @@
     <Compile Include="API\DiscordRPC.cs" />
     <Compile Include="API\QOLDiscordRPC.cs" />
     <Compile Include="Core\QoL.cs" />
+    <Compile Include="Mods\InputHandler.cs" />
+    <Compile Include="Mods\Protections.cs" />
+    <Compile Include="Mods\UIButtons.cs" />
+    <Compile Include="Mods\VRCMod.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Mods\ColorModule.cs" />
+    <Compile Include="Utils\GlobalUtils.cs" />
     <Compile Include="Utils\Wrappers.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

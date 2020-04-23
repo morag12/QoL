@@ -130,7 +130,8 @@ namespace Notorious
 
         public static void EnableOutline(this HighlightsFX instance, Renderer renderer, bool state)
         {
-            instance.Method_Public_Renderer_Boolean_1(renderer, state);
+            instance.Method_Public_Renderer_Boolean_1(renderer, state); //First method to take renderer, bool parameters
         }
+       
     }
 }
