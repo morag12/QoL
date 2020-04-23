@@ -15,7 +15,8 @@ namespace Notorious.API
         public static Transform InstantiateGameobject(string type)
         {
             var quickMenu = Wrappers.GetQuickMenu();
-            switch(type)
+            var VrcUIManager = Wrappers.GetVRCUiManager();
+            switch (type)
             {
                 default:
                     return Object.Instantiate<GameObject>(Wrappers.GetVRCUiPageManager().transform.Find("MenuContent/Screens/Settings/AudioDevicePanel/LevelText").gameObject).transform;
@@ -37,6 +38,8 @@ namespace Notorious.API
                     return Object.Instantiate<GameObject>(quickMenu.transform.Find("UserInteractMenu/BlockButton").gameObject).transform;
                 case "menu":
                     return Object.Instantiate<GameObject>(quickMenu.transform.Find("CameraMenu").gameObject).transform;
+                case "favorite":
+                    return Object.Instantiate<GameObject>(VrcUIManager.transform.Find("MenuContent/Screens/Avatar/ButtonCreate").gameObject).transform;
             }
         }
         private static string ConvertToType(this ButtonType type)
@@ -49,6 +52,8 @@ namespace Notorious.API
                     return "block";
                 case ButtonType.Menu:
                     return "menu";
+                case ButtonType.Half:
+                    return "back";
             }
 
             return "block";
@@ -88,6 +93,9 @@ namespace Notorious.API
 
                     transform.GetComponent<Button>().onClick = new Button.ButtonClickedEvent();
 
+                    DisableButton.SetActive(true);
+                    EnableButton.SetActive(false);
+
                     transform.GetComponent<Button>().onClick.AddListener(new Action(() =>
                     {
                         if (EnableButton.activeSelf)
@@ -105,6 +113,16 @@ namespace Notorious.API
                     }));
                     break;
                 case ButtonType.Default:
+                    transform.GetComponentInChildren<Text>().text = text;
+                    transform.GetComponentInChildren<UiTooltip>().text = tooltip;
+                    transform.GetComponentInChildren<Text>().color = textColor;
+                    transform.GetComponentInChildren<Image>().color = backgroundColor;
+
+                    transform.GetComponent<Button>().onClick = new Button.ButtonClickedEvent();
+                    transform.GetComponent<Button>().onClick.AddListener(listener);
+                    break;
+                case ButtonType.Half:
+                    transform.localScale += new Vector3(0, 0.2f, 0);
                     transform.GetComponentInChildren<Text>().text = text;
                     transform.GetComponentInChildren<UiTooltip>().text = tooltip;
                     transform.GetComponentInChildren<Text>().color = textColor;

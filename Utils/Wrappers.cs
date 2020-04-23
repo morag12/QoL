@@ -6,6 +6,8 @@ using System.Text;
 using UnityEngine;
 using VRC;
 using VRC.Core;
+using VRC.SDKBase;
+using VRCSDK2;
 
 namespace Notorious
 {
@@ -53,6 +55,12 @@ namespace Notorious
             var playerManager = Wrappers.GetPlayerManager();
             return playerManager.GetPlayer(APIUser.id);
         }
+
+        public static Player GetPlayerByRayCast(this RaycastHit RayCast)
+        {
+            var gameObject = RayCast.transform.gameObject;
+            return GetPlayer(Wrappers.GetPlayerManager(), VRCPlayerApi.GetPlayerByGameObject(gameObject).playerId);
+        }
     }
     public static class Wrappers
     {
@@ -93,9 +101,9 @@ namespace Notorious
                 {
                     TooltipManager.Method_Public_String_3(displayText); //Last function to take string parameter
                 }
-                else if (tooltip.tooltip != null)
+                else if (tooltip != null)
                 {
-                     tooltip.tooltip.text = displayText;
+                     tooltip.text = displayText;
                 }
             }
         }
@@ -108,6 +116,21 @@ namespace Notorious
             float Y = quickMenu.transform.Find("UserInteractMenu/ForceLogoutButton").localPosition.x - quickMenu.transform.Find("UserInteractMenu/BanButton").localPosition.x;
 
             transform.transform.localPosition = new Vector3(X * x_pos, Y * y_pos);
+        }
+
+        public static VRCUiManager GetVRCUiManager()
+        {
+            return VRCUiManager.field_VRCUiManager_0;
+        }
+
+        public static HighlightsFX GetHighlightsFX()
+        {
+            return HighlightsFX.prop_HighlightsFX_0;
+        }
+
+        public static void EnableOutline(this HighlightsFX instance, Renderer renderer, bool state)
+        {
+            instance.Method_Public_Renderer_Boolean_1(renderer, state);
         }
     }
 }

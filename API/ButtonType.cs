@@ -10,6 +10,9 @@ namespace Notorious.API
     {
         Default,
         Toggle,
-        Menu
+        Menu,
+        Half,
+        Triangle,
+        Dice
     }
 }
