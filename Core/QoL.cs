@@ -31,7 +31,6 @@ namespace QoL
             Modules.Add(new Protections());
             Modules.Add(new UIButtons());
             Modules.Add(new InputHandler());
-            Modules.ForEach(y => y.OnStart());
 
             MelonModLogger.Log("====================== KEYBINDS ====================");
             MelonModLogger.Log("Press F9 to enable/disable Avatar Force Clone");
@@ -40,8 +39,13 @@ namespace QoL
             MelonModLogger.Log("====================== KEYBINDS ====================");
 
         }
+        public override void VRChat_OnUiManagerInit()
+        {
+            Modules.ForEach(y => y.OnStart());
+        }
         public override void OnUpdate()
         {
+            QOLDiscordRPC.Update();
             Modules.Find(x => x.Name == "Input Handler").OnUpdate();
         }
     }

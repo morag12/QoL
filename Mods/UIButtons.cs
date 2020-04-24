@@ -21,9 +21,7 @@ namespace QoL.Mods
 
         public UIButtons() : base() {}
 
-        public override void OnStart() { base.OnStart(); }
-
-        public override void OnUpdate()
+        public override void OnStart() 
         {
             try
             {
@@ -56,6 +54,10 @@ namespace QoL.Mods
                 }
             }
             catch (Exception) { }
+        }
+
+        public override void OnUpdate()
+        {
 
         }
     }
