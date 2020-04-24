@@ -13,9 +13,9 @@ namespace Notorious
 {
     public static class PlayerWrappers
     {
-        public static VRCPlayer GetCurrentPlayer(this PlayerManager instance)
+        public static VRCPlayer GetCurrentPlayer()
         {
-            return instance.field_List_1_Player_0.get_Item(0).field_VRCPlayer_0;
+            return VRCPlayer.field_VRCPlayer_0;
         }
         public static Il2CppSystem.Collections.Generic.List<Player> GetAllPlayers(this PlayerManager instance)
         {
@@ -64,6 +64,7 @@ namespace Notorious
     }
     public static class Wrappers
     {
+        public static MethodInfo Player;
         public static PlayerManager GetPlayerManager()
         {
             return PlayerManager.Method_Public_21();
@@ -133,5 +134,9 @@ namespace Notorious
             instance.Method_Public_Renderer_Boolean_1(renderer, state); //First method to take renderer, bool parameters
         }
        
+        public static void SetupReflections()
+        {
+            Player = typeof(PlayerManager).GetMethods().Where(x => x.ReturnType == typeof(Player)).First();
+        }
     }
 }

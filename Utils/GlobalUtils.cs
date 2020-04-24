@@ -16,7 +16,5 @@ namespace QoL.Utils
         public static bool SelectedPlayerESP = false;
 
         public static bool Noclip = false;
-
-        public static bool ForceClone = false;
     }
 }

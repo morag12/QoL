@@ -32,12 +32,10 @@ namespace QoL
             Modules.Add(new UIButtons());
             Modules.Add(new InputHandler());
 
-            MelonModLogger.Log("====================== KEYBINDS ====================");
-            MelonModLogger.Log("Press F9 to enable/disable Avatar Force Clone");
-            MelonModLogger.Log("Press F10 to enable/disable Selected ESP");
-            MelonModLogger.Log("Press F11 to enable/disable noclip.");
-            MelonModLogger.Log("====================== KEYBINDS ====================");
-
+            MelonModLogger.Log("=========== KEYBINDS ==============");
+            MelonModLogger.Log("F10 - Enable/Disable Flight");
+            MelonModLogger.Log("F11 - Enable/Disable Selected ESP");
+            MelonModLogger.Log("===================================");
         }
         public override void VRChat_OnUiManagerInit()
         {
@@ -45,7 +43,6 @@ namespace QoL
         }
         public override void OnUpdate()
         {
-            QOLDiscordRPC.Update();
             Modules.Find(x => x.Name == "Input Handler").OnUpdate();
         }
     }

@@ -1,4 +1,5 @@
 ﻿using MelonLoader;
+using NET_SDK;
 using Notorious;
 using QoL.Utils;
 using System;
@@ -17,29 +18,26 @@ namespace QoL.Mods
 
         public override string Description => "This module handles all the given user input.";
 
+        private static bool KillInstance = false;
+
+
         public InputHandler() : base() { }
 
         public override void OnStart() {}
         public override void OnUpdate()
         {
-            if (Input.GetKeyDown(KeyCode.F9))
-            {
-                GlobalUtils.ForceClone = !GlobalUtils.ForceClone;
-            }
-
-            if (GlobalUtils.ForceClone)
-            {
-                UserInteractMenu userInteractMenu = Wrappers.GetUserInteractMenu();
-
-                userInteractMenu.cloneAvatarButton.interactable = true;
-            }
 
             if (Input.GetKeyDown(KeyCode.F10))
             {
+                GlobalUtils.DirectionalFlight = !GlobalUtils.DirectionalFlight;
+                Physics.gravity = GlobalUtils.DirectionalFlight ? Vector3.zero : GlobalUtils.Grav;
+                MelonModLogger.Log($"Flight has been {(GlobalUtils.DirectionalFlight ? "Enabled" : "Disabled")}.");
+            }
+
+            if (Input.GetKeyDown(KeyCode.F11))
+            {
                 GlobalUtils.SelectedPlayerESP = !GlobalUtils.SelectedPlayerESP;
-
                 MelonModLogger.Log($"Selected ESP has been {(GlobalUtils.SelectedPlayerESP ? "Enabled" : "Disabled")}.");
-
 
                 GameObject[] array = GameObject.FindGameObjectsWithTag("Player");
                 for (int i = 0; i < array.Length; i++)
@@ -65,34 +63,35 @@ namespace QoL.Mods
             {
                 GameObject gameObject = Wrappers.GetPlayerCamera();
                 var currentSpeed = (Input.GetKey(KeyCode.LeftShift) ? 16f : 8f);
+                var player = PlayerWrappers.GetCurrentPlayer();
 
                 if (Input.GetKey(KeyCode.W))
                 {
-                    Wrappers.GetPlayerManager().GetCurrentPlayer().transform.position += gameObject.transform.forward * currentSpeed * Time.deltaTime;
+                   player.transform.position += gameObject.transform.forward * currentSpeed * Time.deltaTime;
                 }
                 if (Input.GetKey(KeyCode.A))
                 {
-                    Wrappers.GetPlayerManager().GetCurrentPlayer().transform.position += Wrappers.GetPlayerManager().GetCurrentPlayer().transform.right * -1f * currentSpeed * Time.deltaTime;
+                    player.transform.position += player.transform.right * -1f * currentSpeed * Time.deltaTime;
                 }
                 if (Input.GetKey(KeyCode.S))
                 {
-                    Wrappers.GetPlayerManager().GetCurrentPlayer().transform.position += gameObject.transform.forward * -1f * currentSpeed * Time.deltaTime;
+                    player.transform.position += gameObject.transform.forward * -1f * currentSpeed * Time.deltaTime;
                 }
                 if (Input.GetKey(KeyCode.D))
                 {
-                    Wrappers.GetPlayerManager().GetCurrentPlayer().transform.position += Wrappers.GetPlayerManager().GetCurrentPlayer().transform.right * currentSpeed * Time.deltaTime;
+                    player.transform.position += player.transform.right * currentSpeed * Time.deltaTime;
                 }
                 if (Input.GetKey(KeyCode.Space))
                 {
-                    Wrappers.GetPlayerManager().GetCurrentPlayer().transform.position += Wrappers.GetPlayerManager().GetCurrentPlayer().transform.up * currentSpeed * Time.deltaTime;
+                    player.transform.position += player.transform.up * currentSpeed * Time.deltaTime;
                 }
                 if (Math.Abs(Input.GetAxis("Joy1 Axis 2")) > 0f)
                 {
-                    Wrappers.GetPlayerManager().GetCurrentPlayer().transform.position += gameObject.transform.forward * currentSpeed * Time.deltaTime * (Input.GetAxis("Joy1 Axis 2") * -1f);
+                    player.transform.position += gameObject.transform.forward * currentSpeed * Time.deltaTime * (Input.GetAxis("Joy1 Axis 2") * -1f);
                 }
                 if (Math.Abs(Input.GetAxis("Joy1 Axis 1")) > 0f)
                 {
-                    Wrappers.GetPlayerManager().GetCurrentPlayer().transform.position += gameObject.transform.right * currentSpeed * Time.deltaTime * Input.GetAxis("Joy1 Axis 1");
+                    player.transform.position += gameObject.transform.right * currentSpeed * Time.deltaTime * Input.GetAxis("Joy1 Axis 1");
                 }
             }
         }

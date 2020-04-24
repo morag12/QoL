@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 using QoL.Utils;
+using QoL.API;
 
 namespace QoL.Mods
 {
@@ -46,7 +47,9 @@ namespace QoL.Mods
                         var teleportButton = ButtonAPI.CreateButton(ButtonType.Default, "Teleport", "Teleport to the selected player", Color.white, Color.cyan, 0, 0, Wrappers.GetQuickMenu().transform.Find("UserInteractMenu"), new Action(() =>
                         {
                             MelonModLogger.Log("Teleporting to selected player.");
-                            Wrappers.GetPlayerManager().GetCurrentPlayer().transform.position = Wrappers.GetQuickMenu().transform.position;
+                            var player = PlayerWrappers.GetCurrentPlayer();
+                            var SelectedPlayer = Wrappers.GetQuickMenu().GetSelectedPlayer();
+                            player.transform.position = SelectedPlayer.transform.position;
                         }));
 
                         Buttons.Add(button.gameObject);
