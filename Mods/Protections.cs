@@ -6,9 +6,11 @@ using NET_SDK.Reflection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
 using VRC;
 
 namespace QoL.Mods
@@ -27,11 +29,11 @@ namespace QoL.Mods
             {
                 var HarmonyInstance = Manager.CreateInstance("Quality Assurance");
                 var API = SDK.GetClass("VRC.Core", "API");
-                var Amp = NET_SDK.SDK.GetClass("AmplitudeSDKWrapper", "AmplitudeWrapper");
+                var Amp = SDK.GetClass("AmplitudeSDKWrapper", "AmplitudeWrapper");
+                var AvatarManager = SDK.GetClass("VRCAvatarManager");
                 var moderationManager = SDK.GetClass("ModerationManager");
-                HarmonyInstance.Patch(API.GetMethod("DeviceID"), AccessTools.Method(typeof(QoL), "HWIDSpoofer"));
-                HarmonyInstance.Patch(Amp.GetMethod("InitializeDeviceId"), AccessTools.Method(typeof(QoL), "HWIDSpoofer"));
-                HarmonyInstance.Patch(API.GetMethod("IsOffline"), AccessTools.Method(typeof(QoL), "TruePrefix"));
+                HarmonyInstance.Patch(API.GetMethod("DeviceID"), AccessTools.Method(typeof(Protections), "HWIDSpoofer"));
+                HarmonyInstance.Patch(Amp.GetMethod("InitializeDeviceId"), AccessTools.Method(typeof(Protections), "HWIDSpoofer"));
             }
             catch (Exception e)
             {
@@ -45,17 +47,12 @@ namespace QoL.Mods
                 MelonModLogger.Log("IsOffline: " + VRC.Core.API.IsOffline());
             }
         }
-        public static bool TruePrefix(ref bool __result)
-        {
-            __result = true;
-            return true;
-        }
 
         public static string HWIDSpoofer()
         {
             var crypt = new SHA256Managed();
             string hash = string.Empty;
-            byte[] crypto = crypt.ComputeHash(Encoding.ASCII.GetBytes(new Random().Next(1, 999999999).ToString()));
+            byte[] crypto = crypt.ComputeHash(Encoding.ASCII.GetBytes(new System.Random().Next(1, 999999999).ToString()));
             foreach (byte theByte in crypto)
             {
                 hash += theByte.ToString("x2");
