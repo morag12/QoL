@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using VRC;
 using VRC.SDKBase;
 
 namespace QoL.Mods
@@ -18,14 +19,18 @@ namespace QoL.Mods
 
         public override string Description => "This module handles all the given user input.";
 
-        private static bool KillInstance = false;
-
-
         public InputHandler() : base() { }
 
-        public override void OnStart() {}
+        public override void OnStart() { }
         public override void OnUpdate()
         {
+            if (PlayerWrappers.GetCurrentPlayer() != null)
+            {
+                if (PlayerWrappers.GetCurrentPlayer().GetComponent<PlayerModComponentJump>() != null)
+                {
+                    PlayerWrappers.GetCurrentPlayer().gameObject.AddComponent<PlayerModComponentJump>();
+                }
+            }
 
             if (Input.GetKeyDown(KeyCode.F10))
             {
@@ -92,6 +97,17 @@ namespace QoL.Mods
                 if (Math.Abs(Input.GetAxis("Joy1 Axis 1")) > 0f)
                 {
                     player.transform.position += gameObject.transform.right * currentSpeed * Time.deltaTime * Input.GetAxis("Joy1 Axis 1");
+                }
+            }
+
+            if (GlobalUtils.AntiPortal)
+            {
+                if ((from obj in Resources.FindObjectsOfTypeAll<GameObject>() where obj.name.Contains("Dynamic Clone") select obj).ToList<GameObject>().Count<GameObject>() > 0)
+                {
+                    (from obj in Resources.FindObjectsOfTypeAll<GameObject>() where obj.name.Contains("Dynamic Clone") select obj).ToList<GameObject>().ForEach(delegate (GameObject g)
+                    {
+                          UnityEngine.Object.Destroy(g);
+                    });
                 }
             }
         }
