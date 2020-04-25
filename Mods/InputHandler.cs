@@ -21,8 +21,6 @@ namespace QoL.Mods
 
         public InputHandler() : base() { }
 
-        private GameObject CachedCamBox { get; set; }
-
         public override void OnStart() { }
         public override void OnUpdate()
         {
@@ -104,57 +102,21 @@ namespace QoL.Mods
 
             if (GlobalUtils.ThirdPerson)
             {
-                if (CachedCamBox != null)
-                {
-                    UnityEngine.Object.Destroy(CachedCamBox);
-                    CachedCamBox = null;
-                    GameObject.Find("Camera (eye)").GetComponent<Camera>().enabled = true;
-                    return;
-                }
                 GameObject gameObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
-                gameObject.transform.localScale = GameObject.Find("Camera (eye)").transform.localScale;
+                gameObject.transform.localScale = VRCVrCamera.field_VRCVrCamera_0.screenCamera.transform.localScale;
                 Rigidbody rigidbody = gameObject.AddComponent<Rigidbody>();
                 rigidbody.isKinematic = true;
                 rigidbody.useGravity = false;
-                if (gameObject.GetComponent<Collider>())
-                {
-                    gameObject.GetComponent<Collider>().enabled = false;
-                }
+                if (gameObject.GetComponent<Collider>()) gameObject.GetComponent<Collider>().enabled = false;
                 gameObject.GetComponent<Renderer>().enabled = false;
                 gameObject.AddComponent<Camera>();
-                GameObject gameObject2 = GameObject.Find("Camera (eye)");
+                GameObject gameObject2 = VRCVrCamera.field_VRCVrCamera_0.screenCamera.gameObject;
                 gameObject.transform.parent = gameObject2.transform;
                 gameObject.transform.rotation = gameObject2.transform.rotation;
                 gameObject.transform.position = gameObject2.transform.position;
                 gameObject.transform.position -= gameObject.transform.forward * 2f;
                 gameObject2.GetComponent<Camera>().enabled = false;
                 gameObject.GetComponent<Camera>().fieldOfView = 75f;
-                this.CachedCamBox = gameObject;
-
-                if (Input.GetAxis("Mouse ScrollWheel") > 0f)
-                {
-                    this.CachedCamBox.transform.position += this.CachedCamBox.transform.forward * 0.1f;
-                }
-                else if (Input.GetAxis("Mouse ScrollWheel") < 0f)
-                {
-                    this.CachedCamBox.transform.position -= this.CachedCamBox.transform.forward * 0.1f;
-                }
-                if (Input.GetKey(KeyCode.UpArrow))
-                {
-                    this.CachedCamBox.transform.position += this.CachedCamBox.transform.up * 0.01f;
-                }
-                else if (Input.GetKey(KeyCode.DownArrow))
-                {
-                    this.CachedCamBox.transform.position -= this.CachedCamBox.transform.up * 0.01f;
-                }
-                if (Input.GetKey(KeyCode.RightArrow))
-                {
-                    this.CachedCamBox.GetComponent<Camera>().fieldOfView += 1f;
-                }
-                if (Input.GetKey(KeyCode.LeftArrow))
-                {
-                    this.CachedCamBox.GetComponent<Camera>().fieldOfView -= 1f;
-                }
             }
 
             if (GlobalUtils.ForceClone)

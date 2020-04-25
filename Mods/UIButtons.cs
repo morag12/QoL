@@ -124,7 +124,7 @@ namespace QoL.Mods
                             MelonModLogger.Log($"Third Person has been Disabled.");
                         }));
 
-                        var ForceCloneButton = ButtonAPI.CreateButton(ButtonType.Toggle, "Third Person", "Enable/disable third person", Color.white, Color.blue, -1, -1, parent, new Action(() =>
+                        var ForceCloneButton = ButtonAPI.CreateButton(ButtonType.Toggle, "Force Clone", "Enable/disable force clone", Color.white, Color.blue, -1, -1, parent, new Action(() =>
                         {
                             GlobalUtils.ForceClone = true;
                             MelonModLogger.Log($"Force Clone has been Enabled.");
