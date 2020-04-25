@@ -114,17 +114,28 @@ namespace QoL.Mods
                             MelonModLogger.Log($"Custom Serialisation has been Disabled.");
                         }));
 
-                        var AntiPortalbutton = ButtonAPI.CreateButton(ButtonType.Toggle, "No Portals", "Enable/disable portals from being dropped in the instance.", Color.white, Color.blue, -2, -1, parent, new Action(() =>
+                        var ThirdPersonbutton = ButtonAPI.CreateButton(ButtonType.Toggle, "Third Person", "Enable/disable third person", Color.white, Color.blue, -2, -1, parent, new Action(() =>
                         {
-                            GlobalUtils.AntiPortal = true;
-                            MelonModLogger.Log($"No Portals has been Enabled.");
+                            GlobalUtils.ThirdPerson = true;
+                            MelonModLogger.Log($"Third Person has been Enabled.");
                         }), new Action(() =>
                         {
-                            GlobalUtils.AntiPortal = false;
-                            MelonModLogger.Log($"No Portals has been Disabled.");
+                            GlobalUtils.ThirdPerson = false;
+                            MelonModLogger.Log($"Third Person has been Disabled.");
                         }));
 
-                        Buttons.Add(AntiPortalbutton.gameObject);
+                        var ForceCloneButton = ButtonAPI.CreateButton(ButtonType.Toggle, "Third Person", "Enable/disable third person", Color.white, Color.blue, -1, -1, parent, new Action(() =>
+                        {
+                            GlobalUtils.ForceClone = true;
+                            MelonModLogger.Log($"Force Clone has been Enabled.");
+                        }), new Action(() =>
+                        {
+                            GlobalUtils.ForceClone = false;
+                            MelonModLogger.Log($"Force Clone has been Disabled.");
+                        }));
+
+                        Buttons.Add(ForceCloneButton.gameObject);
+                        Buttons.Add(ThirdPersonbutton.gameObject);
                         Buttons.Add(Flightbutton.gameObject);
                         Buttons.Add(ESPbutton.gameObject);
                         Buttons.Add(teleportButton.gameObject);

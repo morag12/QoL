@@ -17,7 +17,9 @@ namespace QoL.Utils
 
         public static bool SelectedPlayerESP = false;
 
-        public static bool AntiPortal = false;
+        public static bool ThirdPerson = false;
+
+        public static bool ForceClone = false;
 
         public static void ToggleColliders(bool toggle)
         {
