@@ -38,11 +38,13 @@ namespace QoL.Mods
                         {
                             GlobalUtils.DirectionalFlight = true;
                             Physics.gravity = GlobalUtils.DirectionalFlight ? Vector3.zero : GlobalUtils.Grav;
+                            GlobalUtils.ToggleColliders(false);
                             MelonModLogger.Log($"Flight has been {(GlobalUtils.DirectionalFlight ? "Enabled" : "Disabled")}.");
                         }), new Action(() =>
                         {
                             GlobalUtils.DirectionalFlight = false;
                             Physics.gravity = GlobalUtils.DirectionalFlight ? Vector3.zero : GlobalUtils.Grav;
+                            GlobalUtils.ToggleColliders(true);
                             MelonModLogger.Log($"Flight has been {(GlobalUtils.DirectionalFlight ? "Enabled" : "Disabled")}.");
                         }));
 
@@ -114,25 +116,14 @@ namespace QoL.Mods
 
                         var AntiPortalbutton = ButtonAPI.CreateButton(ButtonType.Toggle, "No Portals", "Enable/disable portals from being dropped in the instance.", Color.white, Color.blue, -2, -1, parent, new Action(() =>
                         {
-                            PlayerWrappers.GetCurrentPlayer().GetComponent<PhotonView>().enabled = false;
-                            MelonModLogger.Log($"Custom Serialisation has been Enabled.");
+                            GlobalUtils.AntiPortal = true;
+                            MelonModLogger.Log($"No Portals has been Enabled.");
                         }), new Action(() =>
                         {
-                            PlayerWrappers.GetCurrentPlayer().GetComponent<PhotonView>().enabled = true;
-                            MelonModLogger.Log($"Custom Serialisation has been Disabled.");
+                            GlobalUtils.AntiPortal = false;
+                            MelonModLogger.Log($"No Portals has been Disabled.");
                         }));
 
-                        var NoclipButton = ButtonAPI.CreateButton(ButtonType.Toggle, "Noclip", "Enable/disable noclip", Color.white, Color.blue, -1, -1, parent, new Action(() =>
-                        {
-                            MelonModLogger.Log($"Noclip has been Enabled.");
-                            GlobalUtils.ToggleColliders(false);
-                        }), new Action(() =>
-                        {
-                            MelonModLogger.Log($"Noclip has been Disabled.");
-                            GlobalUtils.ToggleColliders(true);
-                        }));
-
-                        Buttons.Add(NoclipButton.gameObject);
                         Buttons.Add(AntiPortalbutton.gameObject);
                         Buttons.Add(Flightbutton.gameObject);
                         Buttons.Add(ESPbutton.gameObject);

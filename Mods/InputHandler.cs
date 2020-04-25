@@ -102,12 +102,9 @@ namespace QoL.Mods
 
             if (GlobalUtils.AntiPortal)
             {
-                if ((from obj in Resources.FindObjectsOfTypeAll<GameObject>() where obj.name.Contains("Dynamic Clone") select obj).ToList<GameObject>().Count<GameObject>() > 0)
+                if (Resources.FindObjectsOfTypeAll<PortalInternal>().Count() > 0)
                 {
-                    (from obj in Resources.FindObjectsOfTypeAll<GameObject>() where obj.name.Contains("Dynamic Clone") select obj).ToList<GameObject>().ForEach(delegate (GameObject g)
-                    {
-                          UnityEngine.Object.Destroy(g);
-                    });
+                    Resources.FindObjectsOfTypeAll<PortalInternal>().ToList().ForEach(x => Networking.Destroy(x.gameObject));
                 }
             }
         }
