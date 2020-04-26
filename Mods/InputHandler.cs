@@ -43,7 +43,6 @@ namespace QoL.Mods
                 UIButtons.ToggleUIButton(0, GlobalUtils.DirectionalFlight);
                 MelonModLogger.Log($"Flight has been {(GlobalUtils.DirectionalFlight ? "Enabled" : "Disabled")}.");
             }
-            MelonLoader.Imports.UNLOAD_MELONLOADER();
             if (Input.GetKeyDown(KeyCode.F11))
             {
                 GlobalUtils.SelectedPlayerESP = !GlobalUtils.SelectedPlayerESP;
