@@ -3,6 +3,7 @@ using MelonLoader;
 using NET_SDK;
 using NET_SDK.Harmony;
 using NET_SDK.Reflection;
+using QoL.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,10 +31,13 @@ namespace QoL.Mods
                 var HarmonyInstance = Manager.CreateInstance("Quality Assurance");
                 var API = SDK.GetClass("VRC.Core", "API");
                 var Amp = SDK.GetClass("AmplitudeSDKWrapper", "AmplitudeWrapper");
-                var AvatarManager = SDK.GetClass("VRCAvatarManager");
-                var moderationManager = SDK.GetClass("ModerationManager");
+                var Photon = SDK.GetClass("Photon.Pun", "PhotonView");
+                var AvatarManager = SDK.GetClass("", "VRCAvatarManager");
+                var moderationManager = SDK.GetClass("", "ModerationManager");
                 HarmonyInstance.Patch(API.GetMethod("DeviceID"), AccessTools.Method(typeof(Protections), "HWIDSpoofer"));
                 HarmonyInstance.Patch(Amp.GetMethod("InitializeDeviceId"), AccessTools.Method(typeof(Protections), "HWIDSpoofer"));
+                HarmonyInstance.Patch(Photon.GetMethod("Method_Public_Type1595182416_Type2348106871_2"), AccessTools.Method(typeof(Protections), "SerializeView")); //Last function to take class, struct parameters only.
+
             }
             catch (Exception e)
             {
@@ -47,7 +51,10 @@ namespace QoL.Mods
                 MelonModLogger.Log("IsOffline: " + VRC.Core.API.IsOffline());
             }
         }
-
+        public static bool SerializeView()
+        {
+            return GlobalUtils.Serialise;
+        }
         public static string HWIDSpoofer()
         {
             var crypt = new SHA256Managed();

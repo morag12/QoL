@@ -21,6 +21,8 @@ namespace QoL.Utils
 
         public static bool ForceClone = false;
 
+        public static bool Serialise = true;
+
         public static void ToggleColliders(bool toggle)
         {
             Collider[] array = UnityEngine.Object.FindObjectsOfType<Collider>();

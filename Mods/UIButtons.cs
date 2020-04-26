@@ -16,7 +16,7 @@ namespace QoL.Mods
 {
     public class UIButtons : VRCMod
     {
-        private static List<GameObject> Buttons = new List<GameObject>();
+        public static List<GameObject> Buttons = new List<GameObject>();
 
         public override string Name => "UI Buttons";
 
@@ -106,25 +106,15 @@ namespace QoL.Mods
 
                         var Freezebutton = ButtonAPI.CreateButton(ButtonType.Toggle, "Serialize", "Enable/Disable Custom Serialisation", Color.white, Color.blue, -3, -1, parent, new Action(() =>
                         {
-                            PlayerWrappers.GetCurrentPlayer().GetComponent<PhotonView>().enabled = false;
+                            GlobalUtils.Serialise = false;
                             MelonModLogger.Log($"Custom Serialisation has been Enabled.");
                         }), new Action(() =>
                         {
-                            PlayerWrappers.GetCurrentPlayer().GetComponent<PhotonView>().enabled = true;
+                            GlobalUtils.Serialise = true;
                             MelonModLogger.Log($"Custom Serialisation has been Disabled.");
                         }));
 
-                        var ThirdPersonbutton = ButtonAPI.CreateButton(ButtonType.Toggle, "Third Person", "Enable/disable third person", Color.white, Color.blue, -2, -1, parent, new Action(() =>
-                        {
-                            GlobalUtils.ThirdPerson = true;
-                            MelonModLogger.Log($"Third Person has been Enabled.");
-                        }), new Action(() =>
-                        {
-                            GlobalUtils.ThirdPerson = false;
-                            MelonModLogger.Log($"Third Person has been Disabled.");
-                        }));
-
-                        var ForceCloneButton = ButtonAPI.CreateButton(ButtonType.Toggle, "Force Clone", "Enable/disable force clone", Color.white, Color.blue, -1, -1, parent, new Action(() =>
+                        var ForceCloneButton = ButtonAPI.CreateButton(ButtonType.Toggle, "Force Clone", "Enable/disable force clone", Color.white, Color.blue, -2, -1, parent, new Action(() =>
                         {
                             GlobalUtils.ForceClone = true;
                             MelonModLogger.Log($"Force Clone has been Enabled.");
@@ -134,18 +124,39 @@ namespace QoL.Mods
                             MelonModLogger.Log($"Force Clone has been Disabled.");
                         }));
 
-                        Buttons.Add(ForceCloneButton.gameObject);
-                        Buttons.Add(ThirdPersonbutton.gameObject);
                         Buttons.Add(Flightbutton.gameObject);
                         Buttons.Add(ESPbutton.gameObject);
                         Buttons.Add(teleportButton.gameObject);
                         Buttons.Add(Freezebutton.gameObject);
+                        Buttons.Add(ForceCloneButton.gameObject);
                     }
                 }
             }
             catch (Exception) { }
         }
 
+        public static void ToggleUIButton(int Index, bool state)
+        {
+            var gameObject = Buttons[Index];
+
+            if (gameObject == null) return;
+
+            var transform = gameObject.transform;
+
+            var EnableButton = transform.Find("Toggle_States_Visible/ON").gameObject;
+            var DisableButton = transform.Find("Toggle_States_Visible/OFF").gameObject;
+
+            if (state)
+            {
+                DisableButton.SetActive(false);
+                EnableButton.SetActive(true);
+            }
+            else
+            {
+                EnableButton.SetActive(false);
+                DisableButton.SetActive(true);
+            }
+        }
         public override void OnUpdate()
         {
 

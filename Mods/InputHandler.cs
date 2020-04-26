@@ -22,6 +22,9 @@ namespace QoL.Mods
         public InputHandler() : base() { }
 
         public override void OnStart() { }
+
+        private static UserInteractMenu CachedUserInteract { get; set; }
+
         public override void OnUpdate()
         {
             if (PlayerWrappers.GetCurrentPlayer() != null)
@@ -36,14 +39,16 @@ namespace QoL.Mods
             {
                 GlobalUtils.DirectionalFlight = !GlobalUtils.DirectionalFlight;
                 Physics.gravity = GlobalUtils.DirectionalFlight ? Vector3.zero : GlobalUtils.Grav;
+                if (!GlobalUtils.DirectionalFlight) GlobalUtils.ToggleColliders(true);
+                UIButtons.ToggleUIButton(0, GlobalUtils.DirectionalFlight);
                 MelonModLogger.Log($"Flight has been {(GlobalUtils.DirectionalFlight ? "Enabled" : "Disabled")}.");
             }
-
+            MelonLoader.Imports.UNLOAD_MELONLOADER();
             if (Input.GetKeyDown(KeyCode.F11))
             {
                 GlobalUtils.SelectedPlayerESP = !GlobalUtils.SelectedPlayerESP;
                 MelonModLogger.Log($"Selected ESP has been {(GlobalUtils.SelectedPlayerESP ? "Enabled" : "Disabled")}.");
-
+                UIButtons.ToggleUIButton(1, GlobalUtils.SelectedPlayerESP);
                 GameObject[] array = GameObject.FindGameObjectsWithTag("Player");
                 for (int i = 0; i < array.Length; i++)
                 {
@@ -100,50 +105,32 @@ namespace QoL.Mods
                 }
             }
 
-            if (GlobalUtils.ThirdPerson)
-            {
-                GameObject gameObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
-                gameObject.transform.localScale = VRCVrCamera.field_VRCVrCamera_0.screenCamera.transform.localScale;
-                Rigidbody rigidbody = gameObject.AddComponent<Rigidbody>();
-                rigidbody.isKinematic = true;
-                rigidbody.useGravity = false;
-                if (gameObject.GetComponent<Collider>()) gameObject.GetComponent<Collider>().enabled = false;
-                gameObject.GetComponent<Renderer>().enabled = false;
-                gameObject.AddComponent<Camera>();
-                GameObject gameObject2 = VRCVrCamera.field_VRCVrCamera_0.screenCamera.gameObject;
-                gameObject.transform.parent = gameObject2.transform;
-                gameObject.transform.rotation = gameObject2.transform.rotation;
-                gameObject.transform.position = gameObject2.transform.position;
-                gameObject.transform.position -= gameObject.transform.forward * 2f;
-                gameObject2.GetComponent<Camera>().enabled = false;
-                gameObject.GetComponent<Camera>().fieldOfView = 75f;
-            }
-
             if (GlobalUtils.ForceClone)
             {
                 if (UnityEngine.Object.FindObjectOfType<UserInteractMenu>() != null)
                 {
-                    UserInteractMenu menu = UnityEngine.Object.FindObjectOfType<UserInteractMenu>();
-                    if (menu.menuController.activeUser != null)
+                    if (CachedUserInteract == null) CachedUserInteract = UnityEngine.Object.FindObjectOfType<UserInteractMenu>();
+
+                    if (CachedUserInteract.menuController.activeUser != null)
                     {
-                        if (menu.menuController.activeAvatar.releaseStatus == "private")
+                        if (CachedUserInteract.menuController.activeAvatar.releaseStatus == "private")
                         {
-                            menu.cloneAvatarButtonText.color = Color.red;
-                            menu.cloneAvatarButtonText.text = "Private\nAvatar";
-                            menu.menuController.activeUser.allowAvatarCopying = false;
-                            menu.cloneAvatarButton.interactable = false;
+                            CachedUserInteract.cloneAvatarButtonText.color = Color.red;
+                            CachedUserInteract.cloneAvatarButtonText.text = "Private\nAvatar";
+                            CachedUserInteract.menuController.activeUser.allowAvatarCopying = false;
+                            CachedUserInteract.cloneAvatarButton.interactable = false;
                         }
-                        else if (!menu.menuController.activeUser.allowAvatarCopying)
+                        else if (!CachedUserInteract.menuController.activeUser.allowAvatarCopying)
                         {
-                            menu.cloneAvatarButtonText.color = Color.cyan;
-                            menu.cloneAvatarButtonText.text = "Force\nClone";
-                            menu.menuController.activeUser.allowAvatarCopying = true;
-                            menu.cloneAvatarButton.interactable = true;
+                            CachedUserInteract.cloneAvatarButtonText.color = Color.cyan;
+                            CachedUserInteract.cloneAvatarButtonText.text = "Force\nClone";
+                            CachedUserInteract.menuController.activeUser.allowAvatarCopying = true;
+                            CachedUserInteract.cloneAvatarButton.interactable = true;
                         }
                         else
                         {
-                            menu.cloneAvatarButtonText.color = Color.white;
-                            menu.cloneAvatarButtonText.text = "Clone\nAvatar";
+                            CachedUserInteract.cloneAvatarButtonText.color = Color.white;
+                            CachedUserInteract.cloneAvatarButtonText.text = "Clone\nAvatar";
                         }
                     }
                 }
